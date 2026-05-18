@@ -14,7 +14,7 @@ import tempfile
 import os
 from typing import Optional
 
-log = logging.getLogger("redline_ai.services.whisper")
+log = logging.getLogger("cordis.services.whisper")
 
 
 class WhisperService:

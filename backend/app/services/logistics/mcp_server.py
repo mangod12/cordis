@@ -1,5 +1,5 @@
 """
-MCP Server — exposes all TaskForge tools via the Model Context Protocol.
+MCP Server — exposes all Cordis logistics tools via the Model Context Protocol.
 
 Mounts on the FastAPI app at /mcp using Streamable HTTP transport.
 Tools: create_subtask, update_task_status, estimate_effort,
@@ -16,7 +16,7 @@ from mcp.server.fastmcp import FastMCP
 
 logger = logging.getLogger(__name__)
 
-mcp = FastMCP("TaskForge MCP Server")
+mcp = FastMCP("Cordis Logistics MCP Server")
 
 
 # ── Task Tools ───────────────────────────────────────────
@@ -202,9 +202,9 @@ async def disaster_check(
 
 @mcp.resource("system://tools")
 def list_available_tools() -> str:
-    """List all available tools in the TaskForge MCP server."""
+    """List all available tools in the Cordis Logistics MCP server."""
     return (
-        "TaskForge MCP Tools:\n"
+        "Cordis Logistics Tools:\n"
         "1. create_subtask — Create a subtask under a parent task\n"
         "2. update_task_status — Update task status (pending → completed)\n"
         "3. estimate_effort — Estimate hours/days for a task\n"
@@ -217,5 +217,5 @@ def list_available_tools() -> str:
 
 @mcp.resource("system://health")
 def system_health() -> str:
-    """Get TaskForge system health status."""
-    return "TaskForge MCP Server: operational | 7 tools registered | Gemini 2.5 Flash"
+    """Get Cordis system health status."""
+    return "Cordis Logistics MCP Server: operational | 7 tools registered | Gemini 2.5 Flash"

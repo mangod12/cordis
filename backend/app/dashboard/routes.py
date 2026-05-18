@@ -22,7 +22,7 @@ async def dashboard(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         request=request,
         name="index.html",
-        context={"title": "Redline AI Dispatch Dashboard"},
+        context={"title": "Cordis Dispatch Dashboard"},
     )
 
 

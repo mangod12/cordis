@@ -1,4 +1,4 @@
-"""Celery application for Redline AI background tasks.
+"""Celery application for Cordis background tasks.
 
 Start worker:
     celery -A app.worker.celery_app worker --loglevel=info
@@ -13,7 +13,7 @@ from celery import Celery
 REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
 
 celery_app = Celery(
-    "redline_ai",
+    "cordis",
     broker=REDIS_URL,
     backend=REDIS_URL,
     include=["app.tasks"],

@@ -5,7 +5,7 @@ from ..base import BaseAgent
 from ...core.schemas import EmotionAnalysis, EmotionType, Transcript
 from ...core.config import settings
 
-logger = logging.getLogger("redline_ai.emotion")
+logger = logging.getLogger("cordis.emotion")
 
 class MockEmotionAgent(BaseAgent):
     """Real Emotion Agent calling the ML Microservice."""

@@ -7,7 +7,7 @@ from ...core.config import settings
 from ..base import BaseAgent
 from ...core.schemas import ReasoningOutput, EmotionAnalysis
 
-logger = logging.getLogger("redline_ai.reasoning")
+logger = logging.getLogger("cordis.reasoning")
 
 class MockReasoningAgent(BaseAgent):
     """Reasoning Agent using Groq (LLM) or Mock fallback."""

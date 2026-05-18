@@ -15,7 +15,7 @@ from twilio.request_validator import RequestValidator
 
 from app.core.config import settings
 
-log = structlog.get_logger("redline_ai.security")
+log = structlog.get_logger("cordis.security")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

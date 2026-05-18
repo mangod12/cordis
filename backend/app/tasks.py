@@ -1,5 +1,5 @@
 # NOTE: These tasks are stubs. Implement real processing logic before production use.
-"""Celery tasks for Redline AI background processing.
+"""Celery tasks for Cordis background processing.
 
 These tasks are dispatched from the API layer so that heavy or
 side-effectful work (logging, notifications) does not block the
@@ -12,7 +12,7 @@ import logging
 
 from app.worker import celery_app
 
-logger = logging.getLogger("redline_ai.tasks")
+logger = logging.getLogger("cordis.tasks")
 
 
 @celery_app.task(bind=True, name="process_emergency_call", max_retries=3)

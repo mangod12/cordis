@@ -18,7 +18,7 @@ Voice/Text → Whisper STT → Intent (ONNX) → Emotion (ONNX) → Severity
 
 ## What It Does
 
-### Emergency Triage (from Redline-AI)
+### Emergency Triage
 
 | Step | Agent | How |
 |------|-------|-----|
@@ -28,7 +28,7 @@ Voice/Text → Whisper STT → Intent (ONNX) → Emotion (ONNX) → Severity
 | Severity Assessment | SeverityAgent | Deterministic scoring: intent + keywords + emotion + reasoning |
 | Dispatch | DispatchAgent | Routes to responder (ambulance, fire, police) based on intent + severity |
 
-### Logistics Coordination (from TaskForge)
+### Logistics Coordination
 
 | Step | Agent | How |
 |------|-------|-----|

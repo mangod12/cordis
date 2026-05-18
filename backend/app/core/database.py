@@ -40,5 +40,5 @@ async def check_db_health() -> bool:
         return False
 
 
-# Alias for TaskForge/logistics compatibility
+# Alias for logistics module compatibility
 async_session_factory = AsyncSessionLocal

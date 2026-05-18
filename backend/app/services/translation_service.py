@@ -4,7 +4,7 @@ from typing import Optional
 
 from app.core.config import settings
 
-logger = logging.getLogger("redline_ai.translation")
+logger = logging.getLogger("cordis.translation")
 
 class TranslationService:
     """Translation service using LibreTranslate (Open Source)."""

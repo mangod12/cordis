@@ -5,8 +5,8 @@ import streamlit as st
 
 API_URL = os.environ.get("API_URL", "http://localhost:8000") + "/execute"
 
-st.set_page_config(page_title="TaskForge", layout="wide")
-st.title("TaskForge — Crisis AI Coordination")
+st.set_page_config(page_title="Cordis", layout="wide")
+st.title("Cordis â€” Crisis AI Coordination")
 st.success("System Status: ACTIVE")
 
 query = st.text_area(

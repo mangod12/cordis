@@ -1,5 +1,5 @@
 """
-BaseAgent — abstract base class for all TaskForge agents.
+BaseAgent — abstract base class for all Cordis logistics agents.
 
 Each agent:
 - Has a name and a system prompt

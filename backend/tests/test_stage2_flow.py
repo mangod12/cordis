@@ -56,7 +56,7 @@ async def test_end_to_end_pipeline(db_session):
             # subscribe to redis events
             pubsub = redis_client.pubsub()
             await pubsub.subscribe(f"call_events:{call_id}")
-            await pubsub.subscribe("redline.events.calls")
+            await pubsub.subscribe("cordis.events.calls")
 
             # send transcript
             tresp = await client.post(

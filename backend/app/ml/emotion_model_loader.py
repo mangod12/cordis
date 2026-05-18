@@ -22,7 +22,7 @@ import onnxruntime as ort
 
 from app.core.config import settings
 
-logger = logging.getLogger("redline_ai.ml.loader")
+logger = logging.getLogger("cordis.ml.loader")
 
 _EMOTION_LABELS: list[str] = [
     "neutral",

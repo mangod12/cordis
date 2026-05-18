@@ -1,4 +1,4 @@
-"""Schemas package for Redline AI."""
+"""Schemas package for Cordis."""
 
 from .transcript import Transcript
 from .emotion import EmotionAnalysis, EmotionType

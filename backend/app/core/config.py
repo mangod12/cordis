@@ -73,7 +73,7 @@ class Settings(BaseSettings):
                     "SQLite is not supported in production. "
                     "Set USE_SQLITE=false and configure PostgreSQL."
                 )
-            return "sqlite+aiosqlite:///./redline.db"
+            return "sqlite+aiosqlite:///./cordis.db"
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
     
     # Redis
@@ -111,7 +111,7 @@ class Settings(BaseSettings):
 
     # ---- CORS -----------------------------------------------------------
     # Comma-separated list of allowed origins, e.g.:
-    #   ALLOWED_ORIGINS=https://app.redline.ai,https://admin.redline.ai
+    #   ALLOWED_ORIGINS=https://app.cordis.dev,https://admin.cordis.dev
     # Set to "*" only in local development (handled by the lifespan check).
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
 

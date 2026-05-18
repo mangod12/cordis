@@ -1,6 +1,6 @@
 """Logistics API — crisis supply chain coordination endpoints.
 
-Exposes the TaskForge multi-agent pipeline (Resource → Plan → Replan → Execute)
+Exposes the Cordis logistics multi-agent pipeline (Resource → Plan → Replan → Execute)
 as REST endpoints under /api/v1/logistics/.
 """
 

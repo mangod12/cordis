@@ -13,7 +13,7 @@ from app.models.severity_report import SeverityReport
 from app.schemas.severity_report import SeverityReportResponse
 from app.services.base import CRUDBase
 
-logger = structlog.get_logger("redline_ai")
+logger = structlog.get_logger("cordis")
 router = APIRouter()
 
 severity_crud = CRUDBase(SeverityReport)

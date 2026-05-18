@@ -6,7 +6,7 @@ from app.core.redis_client import get_redis_client
 from app.core.database import AsyncSessionLocal
 from app.services.call_processing import CallProcessor
 
-logger = structlog.get_logger("redline_ai.event")
+logger = structlog.get_logger("cordis.event")
 
 _listener_task = None
 
@@ -37,8 +37,8 @@ def start_event_listener():
             return
 
         pubsub = redis.pubsub()
-        await pubsub.subscribe("redline.events.calls")
-        logger.info("Subscribed to redline.events.calls channel for internal events")
+        await pubsub.subscribe("cordis.events.calls")
+        logger.info("Subscribed to cordis.events.calls channel for internal events")
 
         processor = CallProcessor()
 

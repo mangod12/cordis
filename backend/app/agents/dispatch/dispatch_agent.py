@@ -20,7 +20,7 @@ from app.agents.base import BaseAgent
 from app.core.schemas import DispatchReport, DispatchAction, SafetyOutput
 from app.core.schemas.intent import IntentType
 
-log = structlog.get_logger("redline_ai.agents.dispatch")
+log = structlog.get_logger("cordis.agents.dispatch")
 
 INTENT_ROUTING_COUNT = Counter(
     "intent_based_routing_count_total",

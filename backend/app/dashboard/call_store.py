@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, List
 
-_REDIS_KEY = "redline:dashboard:calls"
+_REDIS_KEY = "cordis:dashboard:calls"
 _MAXLEN = 100
 
 

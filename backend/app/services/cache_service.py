@@ -10,7 +10,7 @@ import json
 import logging
 from typing import Any
 
-log = logging.getLogger("redline_ai.services.cache")
+log = logging.getLogger("cordis.services.cache")
 
 _KEY_PREFIX = "emergency_call:"
 _DEFAULT_TTL = 300  # seconds

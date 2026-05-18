@@ -33,7 +33,7 @@ from app.services.dispatch_service import select_responder
 from app.services.severity_service import compute_severity
 from app.dashboard import call_store
 
-log = logging.getLogger("redline_ai.api.emergency")
+log = logging.getLogger("cordis.api.emergency")
 
 router = APIRouter()
 

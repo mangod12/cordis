@@ -3,7 +3,7 @@ import logging
 
 from app.core.config import settings
 
-logger = logging.getLogger("redline_ai.geocoder")
+logger = logging.getLogger("cordis.geocoder")
 
 class Geocoder:
     """Geocoding service using OpenStreetMap/Nominatim (Free/Open Source)."""
@@ -11,7 +11,7 @@ class Geocoder:
     def __init__(self):
         self.base_url = settings.GEOCODER_BASE_URL
         self.headers = {
-            "User-Agent": "RedlineAI-EmergencyGeocoder/1.0"
+            "User-Agent": "Cordis-EmergencyGeocoder/1.0"
         }
         self._client = httpx.AsyncClient(timeout=5.0)
 

@@ -1,4 +1,4 @@
-"""Pipeline connector — bridges Redline emergency triage output to TaskForge logistics input.
+"""Pipeline connector — bridges Cordis triage output to Cordis logistics input.
 
 Takes a completed EmergencyResponse (transcript, intent, severity, responder)
 and generates a structured crisis query for the logistics pipeline.

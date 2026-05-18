@@ -16,4 +16,4 @@ def setup_logging():
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
 
 setup_logging()
-logger = logging.getLogger("redline_ai")
+logger = logging.getLogger("cordis")

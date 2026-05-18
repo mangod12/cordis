@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from uuid import UUID
 from app.core.redis_client import get_redis_client
 
-logger = logging.getLogger("redline_ai")
+logger = logging.getLogger("cordis")
 
 async def publish_call_event(call_id: UUID, event_type: str, payload: dict):
     """
@@ -12,7 +12,7 @@ async def publish_call_event(call_id: UUID, event_type: str, payload: dict):
 
     Two channels are used:
     * per-call channel `call_events:{call_id}` (used by websocket manager)
-    * global channel `redline.events.calls` for pipeline listeners
+    * global channel `cordis.events.calls` for pipeline listeners
 
     Payload format conforms to Stage2 spec.
     """
@@ -30,7 +30,7 @@ async def publish_call_event(call_id: UUID, event_type: str, payload: dict):
     # per-call channel for websockets
     per_channel = f"call_events:{str(call_id)}"
     # global channel for other consumers
-    global_channel = "redline.events.calls"
+    global_channel = "cordis.events.calls"
 
     try:
         await redis.publish(per_channel, json.dumps(message))

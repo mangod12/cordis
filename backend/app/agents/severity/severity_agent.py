@@ -12,7 +12,7 @@ from app.core.schemas import (
 )
 from app.core.schemas.intent import IntentType
 
-log = structlog.get_logger("redline_ai.agents.severity")
+log = structlog.get_logger("cordis.agents.severity")
 
 _INTENT_BASELINE: dict[IntentType, float] = {
     IntentType.MEDICAL: 0.7,

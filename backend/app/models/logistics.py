@@ -1,5 +1,5 @@
 """
-SQLAlchemy ORM models for TaskForge.
+SQLAlchemy ORM models for Cordis logistics.
 Tables: tasks, agent_logs, memory_entries
 """
 

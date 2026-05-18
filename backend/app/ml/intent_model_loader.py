@@ -15,7 +15,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from app.core.config import settings
 
-log = logging.getLogger("redline_ai.ml.intent_loader")
+log = logging.getLogger("cordis.ml.intent_loader")
 
 
 class IntentModelLoader:

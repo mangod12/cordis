@@ -3,7 +3,7 @@ import httpx
 
 from app.core.config import settings
 
-logger = logging.getLogger("redline_ai")
+logger = logging.getLogger("cordis")
 
 
 class MLClient:

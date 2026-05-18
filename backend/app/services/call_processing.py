@@ -13,7 +13,7 @@ from app.services.geocoder import Geocoder
 from app.core.events import publish_call_event
 from app.models.severity_report import SeverityReport
 
-logger = structlog.get_logger("redline_ai.processing")
+logger = structlog.get_logger("cordis.processing")
 
 # CRUD instance for severity reports (was missing from call_service)
 severity_crud = CRUDBase(SeverityReport)

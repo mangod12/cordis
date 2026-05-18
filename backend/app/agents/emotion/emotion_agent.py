@@ -107,7 +107,7 @@ _ml_breaker = pybreaker.CircuitBreaker(
 # Logger
 # ---------------------------------------------------------------------------
 
-log = structlog.get_logger("redline_ai.agents.emotion")
+log = structlog.get_logger("cordis.agents.emotion")
 
 
 # ---------------------------------------------------------------------------

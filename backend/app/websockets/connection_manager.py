@@ -9,7 +9,7 @@ from app.api.deps import get_current_user
 from app.core.redis_client import get_redis_client
 
 router = APIRouter()
-logger = logging.getLogger("redline_ai")
+logger = logging.getLogger("cordis")
 
 class ConnectionManager:
     def __init__(self):

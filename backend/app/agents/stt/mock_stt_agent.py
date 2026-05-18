@@ -9,7 +9,7 @@ from pydub import AudioSegment
 from ..base import BaseAgent
 from ...core.schemas import Transcript
 
-logger = logging.getLogger("redline_ai.stt")
+logger = logging.getLogger("cordis.stt")
 
 class MockSTTAgent(BaseAgent):
     """STT Agent using OpenAI Whisper (Local/Free)."""

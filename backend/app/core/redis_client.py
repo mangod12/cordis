@@ -2,7 +2,7 @@ import redis.asyncio as redis
 from app.core.config import settings
 import logging
 
-logger = logging.getLogger("redline_ai")
+logger = logging.getLogger("cordis")
 
 redis_client = None
 
