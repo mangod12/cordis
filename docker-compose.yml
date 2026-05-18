@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: cordis
+      POSTGRES_PASSWORD: cordis_dev
+      POSTGRES_DB: cordis_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - cordis_pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=dev-secret-change-in-production
+      - USE_SQLITE=false
+      - POSTGRES_USER=cordis
+      - POSTGRES_PASSWORD=cordis_dev
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=cordis_db
+      - REDIS_URL=redis://redis:6379
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - LOGISTICS_ENABLED=true
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  cordis_pgdata:
