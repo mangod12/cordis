@@ -276,7 +276,27 @@ async def process_emergency(
     )
 
     # ------------------------------------------------------------------
-    # 5. Return
+    # 5. Auto-trigger logistics pipeline for critical/high emergencies
+    # ------------------------------------------------------------------
+
+    logistics_task_id = None
+    try:
+        from app.services.pipeline_connector import trigger_logistics_pipeline
+        logistics_task_id = await trigger_logistics_pipeline(
+            transcript=transcript,
+            intent=intent,
+            severity=severity,
+            emotion=emotion_label,
+            responder=responder,
+            caller_id=caller_id,
+        )
+        if logistics_task_id:
+            log.info("logistics pipeline triggered", logistics_task_id=logistics_task_id, call_id=str(call_id))
+    except Exception as exc:
+        log.warning("logistics auto-trigger failed (non-blocking): %s", exc)
+
+    # ------------------------------------------------------------------
+    # 6. Return
     # ------------------------------------------------------------------
 
     return EmergencyResponse(
