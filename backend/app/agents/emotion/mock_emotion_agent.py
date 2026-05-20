@@ -2,7 +2,7 @@ import httpx
 import logging
 from typing import Any, Dict
 from ..base import BaseAgent
-from ...core.schemas import EmotionAnalysis, EmotionType, Transcript
+from ...core.schemas import EmotionAnalysis, EmotionType
 from ...core.config import settings
 
 logger = logging.getLogger("cordis.emotion")
@@ -16,21 +16,21 @@ class MockEmotionAgent(BaseAgent):
 
     async def process(self, input_data: bytes) -> EmotionAnalysis:
         """Analyze raw audio bytes for emotion.
-        
+
         Note: The orchestrator will be updated to pass audio_data here.
         """
         try:
             async with httpx.AsyncClient() as client:
                 files = {'file': ('audio.wav', input_data, 'audio/wav')}
                 response = await client.post(self.service_url, files=files, timeout=10.0)
-                
+
                 if response.status_code == 200:
                     data = response.json()
-                    
+
                     # Map string emotion from RAVDESS to Enum
                     emotion_str = data.get("emotion", "neutral").upper()
                     primary = getattr(EmotionType, emotion_str, EmotionType.NEUTRAL)
-                    
+
                     return EmotionAnalysis(
                         primary_emotion=primary,
                         emotion_scores={primary: data.get("confidence", 0.0)},

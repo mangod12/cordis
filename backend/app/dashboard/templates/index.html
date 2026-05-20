@@ -5,17 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ title }}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    #map { height: 300px; border-radius: 0.75rem; }
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .agent-step { transition: all 0.3s ease; }
+    .agent-step.active { border-color: #22d3ee; background: rgba(34,211,238,0.1); }
+    .agent-step.done { border-color: #4ade80; background: rgba(74,222,128,0.1); }
+    .agent-step.error { border-color: #f87171; background: rgba(248,113,113,0.1); }
+  </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
   <div class="max-w-7xl mx-auto px-4 py-6">
+    <!-- Header -->
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold tracking-tight">Dispatcher Dashboard</h1>
-      <p id="last-updated" class="text-sm text-slate-400">Refreshing...</p>
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Cordis</h1>
+        <p class="text-xs text-slate-400 mt-1">AI Crisis Coordination &mdash; from distress call to resource dispatch</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="system-status" class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 pulse"></span> System Active
+        </span>
+        <p id="last-updated" class="text-sm text-slate-400">Refreshing...</p>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
       <div class="rounded-xl bg-slate-900 border border-slate-800 p-3">
-        <p class="text-xs text-slate-400">Calls (live)</p>
+        <p class="text-xs text-slate-400">Total Calls</p>
         <p id="stat-total" class="text-2xl font-semibold">0</p>
       </div>
       <div class="rounded-xl bg-slate-900 border border-slate-800 p-3">
@@ -27,11 +48,88 @@
         <p id="stat-high" class="text-2xl font-semibold text-amber-300">0</p>
       </div>
       <div class="rounded-xl bg-slate-900 border border-slate-800 p-3">
-        <p class="text-xs text-slate-400">Any Fallback</p>
-        <p id="stat-fallback" class="text-2xl font-semibold text-cyan-300">0%</p>
+        <p class="text-xs text-slate-400">Avg Latency</p>
+        <p id="stat-latency" class="text-2xl font-semibold text-cyan-300">&mdash; ms</p>
+      </div>
+      <div class="rounded-xl bg-slate-900 border border-slate-800 p-3">
+        <p class="text-xs text-slate-400">Fallback Rate</p>
+        <p id="stat-fallback" class="text-2xl font-semibold text-violet-300">0%</p>
       </div>
     </div>
 
+    <!-- Two Column: Map + Input -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+      <!-- Map Panel -->
+      <div class="rounded-xl bg-slate-900 border border-slate-800 p-4">
+        <h2 class="text-sm font-semibold text-slate-300 mb-2">Crisis Map</h2>
+        <div id="map"></div>
+      </div>
+
+      <!-- Input Panel -->
+      <div class="rounded-xl bg-slate-900 border border-slate-800 p-4">
+        <h2 class="text-sm font-semibold text-slate-300 mb-3">Submit Emergency</h2>
+
+        <!-- Audio Upload -->
+        <div class="mb-3">
+          <label class="block text-xs text-slate-400 mb-1">Audio File (optional)</label>
+          <input type="file" id="audio-input" accept="audio/*"
+            class="block w-full text-xs text-slate-400
+              file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0
+              file:text-xs file:font-medium file:bg-slate-800 file:text-slate-200
+              hover:file:bg-slate-700 cursor-pointer" />
+        </div>
+
+        <!-- Text Transcript -->
+        <div class="mb-3">
+          <label class="block text-xs text-slate-400 mb-1">Or type transcript</label>
+          <textarea id="transcript-input" rows="3" placeholder="There is a massive fire at the warehouse on 5th street..."
+            class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none resize-none"></textarea>
+        </div>
+
+        <button id="submit-btn" onclick="submitEmergency()"
+          class="w-full py-2 px-4 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          Process Emergency
+        </button>
+
+        <!-- Agent Pipeline Visualization -->
+        <div id="pipeline-viz" class="mt-4 hidden">
+          <h3 class="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Agent Pipeline</h3>
+          <div class="flex gap-1.5">
+            <div id="step-stt" class="agent-step flex-1 rounded-lg border border-slate-700 p-2 text-center">
+              <p class="text-[10px] text-slate-400">STT</p>
+              <p class="text-xs font-mono" id="step-stt-val">&mdash;</p>
+            </div>
+            <div id="step-intent" class="agent-step flex-1 rounded-lg border border-slate-700 p-2 text-center">
+              <p class="text-[10px] text-slate-400">Intent</p>
+              <p class="text-xs font-mono" id="step-intent-val">&mdash;</p>
+            </div>
+            <div id="step-emotion" class="agent-step flex-1 rounded-lg border border-slate-700 p-2 text-center">
+              <p class="text-[10px] text-slate-400">Emotion</p>
+              <p class="text-xs font-mono" id="step-emotion-val">&mdash;</p>
+            </div>
+            <div id="step-severity" class="agent-step flex-1 rounded-lg border border-slate-700 p-2 text-center">
+              <p class="text-[10px] text-slate-400">Severity</p>
+              <p class="text-xs font-mono" id="step-severity-val">&mdash;</p>
+            </div>
+            <div id="step-dispatch" class="agent-step flex-1 rounded-lg border border-slate-700 p-2 text-center">
+              <p class="text-[10px] text-slate-400">Dispatch</p>
+              <p class="text-xs font-mono" id="step-dispatch-val">&mdash;</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Card -->
+        <div id="result-card" class="mt-3 hidden rounded-lg border border-slate-700 p-3">
+          <div class="flex justify-between items-center mb-2">
+            <span id="result-severity" class="text-sm font-bold"></span>
+            <span id="result-latency" class="text-xs text-slate-400"></span>
+          </div>
+          <p id="result-detail" class="text-xs text-slate-300"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calls Table -->
     <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900">
       <table class="min-w-full text-sm">
         <thead class="bg-slate-800/70 text-slate-300 text-xs uppercase">
@@ -42,13 +140,12 @@
             <th class="px-3 py-3 text-left">Emotion</th>
             <th class="px-3 py-3 text-left">Severity</th>
             <th class="px-3 py-3 text-left">Responder</th>
-            <th class="px-3 py-3 text-left">Fallback Flags</th>
             <th class="px-3 py-3 text-left">Latency</th>
           </tr>
         </thead>
         <tbody id="calls-body" class="divide-y divide-slate-800">
           <tr>
-            <td colspan="8" class="px-3 py-8 text-center text-slate-400">Waiting for calls...</td>
+            <td colspan="7" class="px-3 py-8 text-center text-slate-400">Waiting for calls...</td>
           </tr>
         </tbody>
       </table>
@@ -56,6 +153,130 @@
   </div>
 
   <script>
+    // -- Map Setup --
+    const map = L.map("map").setView([20.5, 82.0], 5);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      maxZoom: 18,
+    }).addTo(map);
+
+    const sevColors = { critical: "#f87171", high: "#fbbf24", medium: "#facc15", low: "#4ade80" };
+
+    const CITIES = {
+      bhubaneswar:[20.30,85.82], kolkata:[22.57,88.36], chennai:[13.08,80.27],
+      mumbai:[19.08,72.88], delhi:[28.61,77.21], bangalore:[12.97,77.59],
+      hyderabad:[17.39,78.49], ahmedabad:[23.02,72.57], jaipur:[26.91,75.79],
+      patna:[25.61,85.14], guwahati:[26.14,91.74], pune:[18.52,73.86],
+      lucknow:[26.85,80.95], puri:[19.81,85.83], cuttack:[20.46,85.88],
+      odisha:[20.50,84.00], bihar:[25.60,85.10], kerala:[10.85,76.27],
+    };
+
+    function plotCall(c) {
+      const text = (c.transcript || "").toLowerCase();
+      for (const [city, coords] of Object.entries(CITIES)) {
+        if (text.includes(city)) {
+          const color = sevColors[c.severity] || "#94a3b8";
+          L.circleMarker(coords, {
+            radius: c.severity === "critical" ? 10 : c.severity === "high" ? 7 : 5,
+            fillColor: color, color: color, weight: 1, opacity: 0.8, fillOpacity: 0.5,
+          }).addTo(map).bindPopup(
+            "<b>" + (c.severity || "").toUpperCase() + "</b><br>" +
+            (c.intent || "") + "<br>" +
+            (c.transcript || "").slice(0, 80) + "..."
+          );
+          break;
+        }
+      }
+    }
+
+    // -- Emergency Submission --
+    async function submitEmergency() {
+      const btn = document.getElementById("submit-btn");
+      const audioInput = document.getElementById("audio-input");
+      const textInput = document.getElementById("transcript-input");
+      const pipelineViz = document.getElementById("pipeline-viz");
+      const resultCard = document.getElementById("result-card");
+
+      btn.disabled = true;
+      btn.textContent = "Processing...";
+      pipelineViz.classList.remove("hidden");
+      resultCard.classList.add("hidden");
+
+      const steps = ["stt", "intent", "emotion", "severity", "dispatch"];
+      steps.forEach(function(s) {
+        document.getElementById("step-" + s).className = "agent-step flex-1 rounded-lg border border-slate-700 p-2 text-center";
+        document.getElementById("step-" + s + "-val").textContent = "\u2014";
+      });
+
+      try {
+        var response;
+        var token = localStorage.getItem("cordis_token") || "";
+        var headers = { "Authorization": "Bearer " + token };
+
+        if (audioInput.files.length > 0) {
+          var formData = new FormData();
+          formData.append("audio_file", audioInput.files[0]);
+          animateStep("stt", "active", "...");
+          response = await fetch("/process-emergency", { method: "POST", headers: headers, body: formData });
+        } else if (textInput.value.trim()) {
+          animateStep("stt", "done", "text");
+          response = await fetch("/process-emergency", {
+            method: "POST",
+            headers: Object.assign({}, headers, { "Content-Type": "application/json" }),
+            body: JSON.stringify({ transcript: textInput.value.trim() }),
+          });
+        } else {
+          alert("Provide audio or text transcript.");
+          btn.disabled = false;
+          btn.textContent = "Process Emergency";
+          return;
+        }
+
+        if (!response.ok) {
+          var err = await response.json().catch(function() { return { detail: response.statusText }; });
+          throw new Error(err.detail || response.statusText);
+        }
+
+        var data = await response.json();
+
+        animateStep("stt", "done", "done");
+        setTimeout(function() { animateStep("intent", "done", data.intent); }, 100);
+        setTimeout(function() { animateStep("emotion", "done", data.emotion); }, 200);
+        setTimeout(function() { animateStep("severity", "done", data.severity); }, 300);
+        setTimeout(function() { animateStep("dispatch", "done", data.responder); }, 400);
+
+        setTimeout(function() {
+          resultCard.classList.remove("hidden");
+          var sevEl = document.getElementById("result-severity");
+          sevEl.textContent = data.severity.toUpperCase() + " \u2014 " + data.intent;
+          sevEl.className = "text-sm font-bold " + sevClass(data.severity);
+          document.getElementById("result-latency").textContent = data.latency_ms + "ms";
+          document.getElementById("result-detail").textContent =
+            "Dispatched: " + data.responder + " | Call ID: " + data.call_id;
+          plotCall(data);
+        }, 500);
+
+        refresh();
+      } catch (err) {
+        animateStep("stt", "error", "ERR");
+        resultCard.classList.remove("hidden");
+        document.getElementById("result-severity").textContent = "ERROR";
+        document.getElementById("result-severity").className = "text-sm font-bold text-rose-400";
+        document.getElementById("result-detail").textContent = err.message;
+        document.getElementById("result-latency").textContent = "";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Process Emergency";
+      }
+    }
+
+    function animateStep(name, state, value) {
+      var el = document.getElementById("step-" + name);
+      el.className = "agent-step " + state + " flex-1 rounded-lg border border-slate-700 p-2 text-center";
+      document.getElementById("step-" + name + "-val").textContent = value || "\u2014";
+    }
+
+    // -- Table Refresh --
     function sevClass(level) {
       if (level === "critical") return "text-rose-400";
       if (level === "high") return "text-amber-300";
@@ -69,53 +290,62 @@
     }
 
     function renderRow(c) {
-      const fallbackText = "any=" + (c.fallback_used ? "Y" : "N") +
-        " | intent=" + (c.intent_fallback ? "Y" : "N") +
-        " | emotion=" + (c.emotion_fallback ? "Y" : "N");
-
-      return `
-        <tr class="hover:bg-slate-800/40">
-          <td class="px-3 py-2 font-mono text-xs text-slate-300">${c.call_id}</td>
-          <td class="px-3 py-2 text-slate-200 max-w-xl">${trimText(c.transcript || "", 120)}</td>
-          <td class="px-3 py-2 text-slate-200">${c.intent} (${((c.intent_confidence || 0) * 100).toFixed(1)}%)</td>
-          <td class="px-3 py-2 text-slate-200">${c.emotion}</td>
-          <td class="px-3 py-2 font-semibold ${sevClass(c.severity)}">${c.severity}</td>
-          <td class="px-3 py-2 text-slate-200">${c.responder}</td>
-          <td class="px-3 py-2 text-slate-300 text-xs">${fallbackText}</td>
-          <td class="px-3 py-2 text-cyan-300">${Number(c.latency_ms || 0).toFixed(0)} ms</td>
-        </tr>
-      `;
+      return '<tr class="hover:bg-slate-800/40">' +
+        '<td class="px-3 py-2 font-mono text-xs text-slate-300">' + (c.call_id || "") + '</td>' +
+        '<td class="px-3 py-2 text-slate-200 max-w-xl">' + trimText(c.transcript || "", 100) + '</td>' +
+        '<td class="px-3 py-2 text-slate-200">' + (c.intent || "") + ' (' + ((c.intent_confidence || 0) * 100).toFixed(0) + '%)</td>' +
+        '<td class="px-3 py-2 text-slate-200">' + (c.emotion || "") + '</td>' +
+        '<td class="px-3 py-2 font-semibold ' + sevClass(c.severity) + '">' + (c.severity || "") + '</td>' +
+        '<td class="px-3 py-2 text-slate-200">' + (c.responder || "") + '</td>' +
+        '<td class="px-3 py-2 text-cyan-300">' + Number(c.latency_ms || 0).toFixed(0) + ' ms</td>' +
+        '</tr>';
     }
 
     async function refresh() {
       try {
-        const response = await fetch("/api/v1/calls/live?limit=50");
-        const data = await response.json();
-        const calls = data.calls || [];
+        var token = localStorage.getItem("cordis_token") || "";
+        var response = await fetch("/api/v1/calls/live?limit=50", {
+          headers: { "Authorization": "Bearer " + token },
+        });
+        if (!response.ok) return;
+        var data = await response.json();
+        var calls = data.calls || [];
 
         document.getElementById("last-updated").textContent = "Updated " + new Date().toLocaleTimeString();
         document.getElementById("stat-total").textContent = String(calls.length);
-        document.getElementById("stat-critical").textContent = String(calls.filter(c => c.severity === "critical").length);
-        document.getElementById("stat-high").textContent = String(calls.filter(c => c.severity === "high").length);
+        document.getElementById("stat-critical").textContent = String(calls.filter(function(c) { return c.severity === "critical"; }).length);
+        document.getElementById("stat-high").textContent = String(calls.filter(function(c) { return c.severity === "high"; }).length);
 
-        const fallbackRate = calls.length
-          ? Math.round((calls.filter(c => c.fallback_used).length / calls.length) * 100)
+        var avgLatency = calls.length
+          ? Math.round(calls.reduce(function(sum, c) { return sum + (c.latency_ms || 0); }, 0) / calls.length)
+          : 0;
+        document.getElementById("stat-latency").textContent = avgLatency ? avgLatency + " ms" : "\u2014 ms";
+
+        var fallbackRate = calls.length
+          ? Math.round((calls.filter(function(c) { return c.fallback_used; }).length / calls.length) * 100)
           : 0;
         document.getElementById("stat-fallback").textContent = fallbackRate + "%";
 
-        const body = document.getElementById("calls-body");
+        var body = document.getElementById("calls-body");
         if (!calls.length) {
-          body.innerHTML = '<tr><td colspan="8" class="px-3 py-8 text-center text-slate-400">Waiting for calls...</td></tr>';
+          body.innerHTML = '<tr><td colspan="7" class="px-3 py-8 text-center text-slate-400">Waiting for calls...</td></tr>';
           return;
         }
         body.innerHTML = calls.map(renderRow).join("");
+        calls.forEach(plotCall);
       } catch (error) {
         document.getElementById("last-updated").textContent = "Refresh failed";
       }
     }
 
+    // -- Init --
     refresh();
-    setInterval(refresh, 2000);
+    setInterval(refresh, 3000);
+
+    if (!localStorage.getItem("cordis_token")) {
+      var token = prompt("Enter JWT token (or press Cancel for demo mode):");
+      if (token) localStorage.setItem("cordis_token", token);
+    }
   </script>
 </body>
 </html>

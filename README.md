@@ -231,6 +231,17 @@ See [LICENSE](LICENSE) for terms (Apache 2.0).
 
 ---
 
+## History
+
+Cordis began as two separate projects:
+
+- **Redline-AI** — an AI-powered emergency triage system (voice → intent → severity → dispatch)
+- **TaskForge** — a multi-agent logistics coordination engine for crisis supply chains
+
+In May 2026, both were merged into **Cordis** — a single end-to-end platform that connects distress calls directly to resource dispatch. The name comes from the Latin word for "heart."
+
+---
+
 ## License
 
 Apache License 2.0 — free to use, modify, and distribute. See [LICENSE](LICENSE).

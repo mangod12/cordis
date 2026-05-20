@@ -1,5 +1,4 @@
-from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Column, String, ForeignKey, JSON
 
 from app.models.base import TenantModel
 
@@ -10,4 +9,4 @@ class AuditLog(TenantModel):
     action = Column(String, index=True, nullable=False)
     entity_id = Column(String, nullable=True)
     entity_type = Column(String, nullable=True)
-    details = Column(JSONB, default=dict, nullable=False)
+    details = Column(JSON, default=dict, nullable=False)

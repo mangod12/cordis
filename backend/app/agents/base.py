@@ -1,7 +1,7 @@
 """Base classes for agents in the Cordis system."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Generic, TypeVar
+from typing import Generic, TypeVar
 from pydantic import BaseModel
 
 TInput = TypeVar('TInput', bound=BaseModel)

@@ -6,7 +6,6 @@ Used for semantic search in the knowledge base (pgvector).
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

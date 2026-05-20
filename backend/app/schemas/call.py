@@ -1,5 +1,3 @@
-from typing import Optional
-from uuid import UUID
 from app.models.call import CallStatus
 from app.schemas.base import TenantBaseSchema, CoreModel
 

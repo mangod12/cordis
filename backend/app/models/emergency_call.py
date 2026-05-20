@@ -5,10 +5,17 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, DateTime, Integer, String, Text
 
 from app.models.base import Base
+from app.core.config import settings
+
+# Use String(36) for SQLite, native UUID for PostgreSQL
+if settings.USE_SQLITE:
+    _UUIDType = String(36)
+else:
+    from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+    _UUIDType = PG_UUID(as_uuid=True)
 
 
 class EmergencyCall(Base):
@@ -18,7 +25,7 @@ class EmergencyCall(Base):
 
     # Primary key
     call_id: uuid.UUID = Column(
-        UUID(as_uuid=True),
+        _UUIDType,
         primary_key=True,
         default=uuid.uuid4,
         index=True,
@@ -29,7 +36,7 @@ class EmergencyCall(Base):
     caller_id: str | None = Column(String(255), nullable=True, index=True)
 
     # Tenant scoping (nullable for backward compatibility with existing rows)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="SET NULL"), nullable=True, index=True)
+    tenant_id = Column(String(36), nullable=True, index=True)
 
     # STT / raw transcript
     transcript: str = Column(Text, nullable=False)

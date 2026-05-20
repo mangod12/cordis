@@ -1,6 +1,5 @@
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Optional
 import structlog
 
 from app.services import call_service

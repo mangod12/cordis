@@ -64,7 +64,7 @@ class Settings(BaseSettings):
     @property
     def port(self) -> int:
         return 8000
-    
+
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
         if self.USE_SQLITE:
@@ -75,7 +75,7 @@ class Settings(BaseSettings):
                 )
             return "sqlite+aiosqlite:///./cordis.db"
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-    
+
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
 
@@ -84,7 +84,7 @@ class Settings(BaseSettings):
     TRANSLATION_SERVICE_URL: str = "https://libretranslate.de/translate"
     GEOCODER_BASE_URL: str = "https://nominatim.openstreetmap.org/search"
     GROQ_API_KEY: Optional[str] = None
-    
+
     INTENT_MODEL_NAME: str = "distilbert-base-uncased"
     INTENT_ONNX_PATH: str = str(
         Path(__file__).resolve().parents[2] / "ml" / "intent_model.onnx"

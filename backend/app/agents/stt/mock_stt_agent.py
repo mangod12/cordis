@@ -36,10 +36,10 @@ class MockSTTAgent(BaseAgent):
 
     def _transcribe(self, audio_bytes: bytes) -> Transcript:
         try:
-            # Whisper expects a filename or numpy array. 
+            # Whisper expects a filename or numpy array.
             # We'll use a temp file for simplicity with raw bytes.
             with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-                # Convert raw bytes to wav using pydub if necessary 
+                # Convert raw bytes to wav using pydub if necessary
                 # (Assumes source is something pydub can handle like mp3/wav/ogg)
                 audio = AudioSegment.from_file(io.BytesIO(audio_bytes))
                 audio.export(tmp_file.name, format="wav")
@@ -48,7 +48,7 @@ class MockSTTAgent(BaseAgent):
             try:
                 # Transcribe
                 result = self.model.transcribe(tmp_path)
-                
+
                 return Transcript(
                     text=result.get("text", "").strip(),
                     confidence=0.9, # Whisper doesn't give a simple aggregate confidence easily

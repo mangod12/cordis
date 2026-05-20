@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, String, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 import enum
 
@@ -16,5 +16,5 @@ class User(TenantModel):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(SQLEnum(RoleEnum), default=RoleEnum.viewer, nullable=False)
-    
+
     tenant = relationship("Tenant", back_populates="users")

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -7,8 +7,6 @@ from app.services.base import CRUDBase
 from app.models.call import Call, Transcript
 from app.models.analysis_result import AnalysisResult
 from app.models.dispatch_recommendation import DispatchRecommendation
-from app.schemas.call import CallCreate, CallUpdate
-from app.schemas.transcript import TranscriptCreate
 
 class CRUDCall(CRUDBase):
     async def get_multi_by_tenant(

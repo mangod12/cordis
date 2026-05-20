@@ -33,7 +33,7 @@ class MockReasoningAgent(BaseAgent):
         """
         if self.client:
             return await self._process_with_groq(input_data)
-        
+
         # Fallback to Mock Logic
         await asyncio.sleep(0.1)
         return self._fallback_mock(input_data)
@@ -43,7 +43,7 @@ class MockReasoningAgent(BaseAgent):
         Analyze the following emergency call emotion data and provide a structured JSON response.
         Primary Emotion: {input_data.primary_emotion.value}
         Intensity: {input_data.intensity}
-        
+
         Respond ONLY with a JSON object in this format:
         {{
             "key_insights": ["list", "of", "3", "insights"],
@@ -52,19 +52,19 @@ class MockReasoningAgent(BaseAgent):
             "confidence": 0.9
         }}
         """
-        
+
         try:
             # Run in executor since the groq client is sync (for now)
             loop = asyncio.get_running_loop()
             completion = await loop.run_in_executor(
-                None, 
+                None,
                 lambda: self.client.chat.completions.create(
                     model="llama3-70b-8192",
                     messages=[{"role": "user", "content": prompt}],
                     response_format={"type": "json_object"}
                 )
             )
-            
+
             data = json.loads(completion.choices[0].message.content)
             return ReasoningOutput(
                 key_insights=data.get("key_insights", []),

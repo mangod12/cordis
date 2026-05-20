@@ -319,7 +319,7 @@ class EmotionAgent(BaseAgent):
         # We give ML a "soft budget" of 800ms before falling back.
         # This prevents the instant heuristic from always winning (FIRST_COMPLETED risk).
         ml_task = asyncio.create_task(self._run_ml(text))
-        
+
         try:
             # Stage 1: Wait for ML within the soft budget
             ml_result = await asyncio.wait_for(asyncio.shield(ml_task), timeout=0.8)
@@ -338,15 +338,15 @@ class EmotionAgent(BaseAgent):
         # We still keep the hard 3s limit for the whole stage.
         try:
             heuristic_result = await asyncio.wait_for(
-                self._run_heuristic(text), 
+                self._run_heuristic(text),
                 timeout=2.0 # Remaining time
             )
-            
+
             # If ML task eventually finishes while we were doing heuristic, we could log it
             # but for emergency responsiveness, we return heuristic now.
             FALLBACK_USAGE_COUNT.labels(trigger="ml_slow_or_failure").inc()
             return heuristic_result
-            
+
         except Exception as exc:
             bound_log.error("Heuristic fallback failed", error=str(exc))
             FALLBACK_USAGE_COUNT.labels(trigger="total_failure").inc()
@@ -387,9 +387,10 @@ class EmotionAgent(BaseAgent):
         except Exception as exc:
             ML_FAILURE_COUNT.labels(reason="exception").inc()
             log.error("ML inference exception", exc=str(exc))
+            exc_msg = str(exc)
             try:
                 _ml_breaker.call(
-                    lambda: (_ for _ in ()).throw(RuntimeError(str(exc)))
+                    lambda: (_ for _ in ()).throw(RuntimeError(exc_msg))
                 )
             except Exception:  # noqa: BLE001
                 pass

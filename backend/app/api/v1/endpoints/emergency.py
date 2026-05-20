@@ -18,7 +18,6 @@ import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -213,9 +212,9 @@ async def process_emergency(
     call_id = uuid.uuid4()
 
     call_row = EmergencyCall(
-        call_id=call_id,
+        call_id=str(call_id),
         caller_id=caller_id,
-        tenant_id=token_payload.get("tenant_id"),
+        tenant_id=str(token_payload.get("tenant_id", "")),
         transcript=transcript,
         intent=intent,
         emotion=emotion_label,

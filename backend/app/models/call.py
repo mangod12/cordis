@@ -13,7 +13,7 @@ class Call(TenantModel):
 
     caller_number = Column(String, index=True, nullable=False)
     status = Column(SQLEnum(CallStatus), default=CallStatus.active, nullable=False)
-    
+
     # tenant_id is inherited from TenantModel — access via self.tenant_id directly
     transcripts = relationship("Transcript", back_populates="call", cascade="all, delete")
     severity_reports = relationship("SeverityReport", back_populates="call", cascade="all, delete")
@@ -27,5 +27,5 @@ class Transcript(TenantModel):
     original_text = Column(String, nullable=False)
     translated_text = Column(String, nullable=True)
     language = Column(String, default="en", nullable=False)
-    
+
     call = relationship("Call", back_populates="transcripts")

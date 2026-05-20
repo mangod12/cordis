@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 import jwt
 from jwt.exceptions import PyJWTError as JWTError
@@ -29,7 +29,7 @@ async def get_current_user(
             raise HTTPException(status_code=403, detail="Could not validate credentials")
     except JWTError:
         raise HTTPException(status_code=403, detail="Could not validate credentials")
-    
+
     result = await db.execute(select(User).where(User.id == token_data.sub))
     user = result.scalar_one_or_none()
     if not user:

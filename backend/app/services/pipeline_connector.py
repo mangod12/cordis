@@ -7,7 +7,6 @@ and generates a structured crisis query for the logistics pipeline.
 from __future__ import annotations
 
 import logging
-import uuid
 from typing import Optional
 
 from app.core.config import settings

@@ -7,7 +7,6 @@ import re
 import time
 from typing import TYPE_CHECKING, Optional
 
-import numpy as np
 from prometheus_client import Counter, Histogram
 
 from app.agents.base import BaseAgent

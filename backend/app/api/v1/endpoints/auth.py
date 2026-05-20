@@ -1,6 +1,6 @@
 from datetime import timedelta
 from typing import Any
-from fastapi import APIRouter, Body, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -30,7 +30,7 @@ async def login_access_token(
 
     if not user or not security.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
-    
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
         "access_token": security.create_access_token(
@@ -56,13 +56,13 @@ async def register_user(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
-    
+
     # Check if tenant exists
     result = await db.execute(select(Tenant).where(Tenant.id == user_in.tenant_id))
     tenant = result.scalar_one_or_none()
     if not tenant:
         raise HTTPException(status_code=404, detail="Tenant not found")
-        
+
     user = User(
         email=user_in.email,
         hashed_password=security.get_password_hash(user_in.password),

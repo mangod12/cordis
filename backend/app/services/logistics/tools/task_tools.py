@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import Any, Optional
+from typing import Any
 
 from app.services.logistics.tools.registry import tool_registry
 

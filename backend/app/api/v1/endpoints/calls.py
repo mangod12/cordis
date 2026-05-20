@@ -5,7 +5,7 @@ from uuid import UUID
 
 from app.api.deps import get_db, get_current_user, get_tenant_id
 from app.models.user import User
-from app.schemas.call import CallCreate, CallResponse, CallUpdate
+from app.schemas.call import CallCreate, CallResponse
 from app.schemas.transcript import TranscriptCreate, TranscriptResponse
 from app.services import call_service
 
@@ -74,7 +74,7 @@ async def add_transcript(
         raise HTTPException(status_code=404, detail="Call not found")
     if call.tenant_id != tenant_id:
         raise HTTPException(status_code=403, detail="Not enough permissions")
-        
+
     # process the transcript through the new Stage2 pipeline
     from app.services.call_processing import CallProcessor
     from app.core.redis_client import get_redis_client

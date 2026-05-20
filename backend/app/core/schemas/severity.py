@@ -1,7 +1,7 @@
 """Pydantic models for severity assessment data."""
 
 from pydantic import BaseModel, Field
-from typing import Dict, List
+from typing import Dict
 from enum import Enum
 
 

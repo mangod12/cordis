@@ -1,11 +1,9 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import asyncio
 import json
 import logging
 from typing import Dict
-from uuid import UUID
 
-from app.api.deps import get_current_user
 from app.core.redis_client import get_redis_client
 
 router = APIRouter()
@@ -89,13 +87,13 @@ async def websocket_endpoint(websocket: WebSocket, call_id: str):
         return
 
     await manager.connect(websocket, call_id)
-    
+
     redis = get_redis_client()
     if not redis:
         logger.error("Redis not initialized for websockets")
         manager.disconnect(websocket, call_id)
         return
-        
+
     pubsub = redis.pubsub()
     channel_name = f"call_events:{call_id}"
     await pubsub.subscribe(channel_name)
@@ -113,7 +111,7 @@ async def websocket_endpoint(websocket: WebSocket, call_id: str):
                     "call_id": data.get("call_id"),
                 }
                 await manager.broadcast_to_call(call_id, simplified)
-                
+
             # Yield to other tasks
             await asyncio.sleep(0.01)
 

@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,13 +39,13 @@ async def analyze_severity(
         raise HTTPException(status_code=404, detail="Call not found")
     if call.tenant_id != tenant_id:
         raise HTTPException(status_code=403, detail="Not enough permissions")
-        
+
     # Get latest transcript or full transcript
     result = await db.execute(select(Transcript).where(Transcript.call_id == call_id))
     transcripts = result.scalars().all()
-    
+
     full_text = " ".join([t.original_text for t in transcripts])
-    
+
     # Use SeverityEngine for scoring
     keyword_score = 0.0
     detected = []
@@ -59,7 +59,7 @@ async def analyze_severity(
 
     score = severity_engine.calculate(0.5, keyword_score, "unknown")
     category = severity_engine.category(score)
-    
+
     report = await severity_crud.create(
         db,
         obj_in={
@@ -70,7 +70,7 @@ async def analyze_severity(
             "tenant_id": tenant_id
         }
     )
-    
+
     # Cache in Redis
     from app.core.redis_client import get_redis_client
     redis = get_redis_client()
