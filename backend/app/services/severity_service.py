@@ -13,6 +13,8 @@ _CRITICAL_KW = frozenset([
     "no pulse", "overdose", "building collapse", "collapsed building",
     "people trapped", "mass casualty", "hostage", "bomb",
     "tsunami", "active shooter",
+    # Hindi / Hinglish
+    "mar diya", "goli", "bomb blast", "aag lag gayi",
 ])
 
 _HIGH_KW = frozenset([
@@ -23,6 +25,8 @@ _HIGH_KW = frozenset([
     "accident", "crash", "pileup", "highway", "derailment",
     "drowning", "electrocution", "chemical spill", "toxic",
     "stampede", "riot", "violence", "assault",
+    # Hindi / Hinglish
+    "aag", "khoon", "dard", "hadsa", "baadh", "toofan", "bhookamp",
 ])
 
 _MEDIUM_KW = frozenset([
@@ -30,6 +34,8 @@ _MEDIUM_KW = frozenset([
     "worried", "anxiety", "smoke", "fumes", "stranded",
     "missing", "lost", "damage", "power outage", "water shortage",
     "medicine", "supplies", "relief", "shelter",
+    # Hindi / Hinglish
+    "chot", "bimaar", "madad", "darr", "takleef",
 ])
 
 # Emotions that boost severity level up by one tier
