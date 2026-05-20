@@ -1,0 +1,9 @@
+{
+  "name": "Cyclone approaching eastern coast",
+  "transcript": "Cyclone warning for the eastern coast near Chennai, evacuations needed, medical supplies running low in coastal areas",
+  "expected_severity": ["critical", "high", "medium"],
+  "logistics_query": "Cyclone approaching eastern coast near Chennai, medical supplies needed",
+  "expected_crisis_type": "Cyclone",
+  "expected_resources": ["Medical Supplies"],
+  "expected_replan": true
+}

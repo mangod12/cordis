@@ -10,17 +10,26 @@ from __future__ import annotations
 _CRITICAL_KW = frozenset([
     "dying", "dead", "not breathing", "gun", "shot", "stabbed",
     "explosion", "major accident", "cardiac arrest", "unconscious",
-    "no pulse", "overdose",
+    "no pulse", "overdose", "building collapse", "collapsed building",
+    "people trapped", "mass casualty", "hostage", "bomb",
+    "tsunami", "active shooter",
 ])
 
 _HIGH_KW = frozenset([
     "fire", "blood", "bleeding", "can't breathe", "choking",
     "broken", "serious", "bad", "pain", "emergency",
+    "flood", "flooding", "cyclone", "earthquake", "landslide",
+    "gas leak", "gas smell", "evacuating", "evacuation",
+    "accident", "crash", "pileup", "highway", "derailment",
+    "drowning", "electrocution", "chemical spill", "toxic",
+    "stampede", "riot", "violence", "assault",
 ])
 
 _MEDIUM_KW = frozenset([
     "hurt", "injury", "sick", "fell", "help", "scared",
-    "worried", "anxiety",
+    "worried", "anxiety", "smoke", "fumes", "stranded",
+    "missing", "lost", "damage", "power outage", "water shortage",
+    "medicine", "supplies", "relief", "shelter",
 ])
 
 # Emotions that boost severity level up by one tier

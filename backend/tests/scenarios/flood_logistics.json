@@ -1,0 +1,9 @@
+{
+  "name": "Flood causing food shortage in Odisha",
+  "transcript": "Severe flooding in Odisha has cut off three districts, thousands of people need food and clean water, roads are blocked",
+  "expected_severity": ["critical", "high", "medium"],
+  "logistics_query": "Flood in Odisha causing food shortage across 3 districts",
+  "expected_crisis_type": "Flood",
+  "expected_resources": ["Food Supply", "Drinking Water"],
+  "expected_replan": true
+}

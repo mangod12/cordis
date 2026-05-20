@@ -1,0 +1,8 @@
+{
+  "name": "Gas leak in residential area",
+  "transcript": "There is a strong smell of gas coming from the building next door in Delhi, people are evacuating",
+  "expected_intent": "gas_hazard",
+  "expected_severity": ["critical", "high"],
+  "expected_responder": ["fire_dispatch", "hazmat", "general_responder"],
+  "expected_logistics_trigger": true
+}

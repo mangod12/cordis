@@ -1,0 +1,8 @@
+{
+  "name": "Cardiac arrest - not breathing",
+  "transcript": "Someone collapsed and is not breathing, I think they are having a cardiac arrest, please send an ambulance to Kolkata main street",
+  "expected_intent": "medical",
+  "expected_severity": ["critical"],
+  "expected_responder": "ambulance",
+  "expected_logistics_trigger": true
+}

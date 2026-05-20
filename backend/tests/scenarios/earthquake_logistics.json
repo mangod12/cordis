@@ -1,0 +1,9 @@
+{
+  "name": "Earthquake relief coordination",
+  "transcript": "Major earthquake in Uttarakhand, buildings collapsed, roads damaged, immediate medical and rescue teams needed",
+  "expected_severity": ["critical", "high", "medium"],
+  "logistics_query": "Earthquake in Uttarakhand causing building collapse, medical teams and rescue equipment needed",
+  "expected_crisis_type": "Earthquake",
+  "expected_resources": ["Medical Supplies", "Emergency Shelter"],
+  "expected_replan": true
+}

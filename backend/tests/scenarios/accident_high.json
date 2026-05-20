@@ -1,0 +1,8 @@
+{
+  "name": "Multi-vehicle accident on highway",
+  "transcript": "There has been a major accident on the highway near Pune, multiple vehicles involved, people are injured and traffic is completely stopped",
+  "expected_intent": "accident",
+  "expected_severity": ["high", "critical"],
+  "expected_responder": ["ambulance", "police_dispatch"],
+  "expected_logistics_trigger": true
+}

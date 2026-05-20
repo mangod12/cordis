@@ -9,3 +9,7 @@ from pathlib import Path
 # Add the backend directory to Python path so 'app' package is importable
 backend_dir = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(backend_dir))
+
+# Allow nested event loops (fixes async test conflicts when logistics imports run)
+import nest_asyncio
+nest_asyncio.apply()

@@ -30,13 +30,17 @@ _CRITICAL_FLOOR_KEYWORDS: tuple[str, ...] = (
     "cardiac arrest",
     "gunshot",
     "fire spreading",
+    "building collapse",
+    "people trapped",
+    "tsunami",
+    "mass casualty",
 )
 
 _KEYWORD_WEIGHTS: tuple[tuple[float, tuple[str, ...]], ...] = (
-    (0.95, ("active shooter", "mass casualty", "explosion", "hostage")),
-    (0.85, ("gun", "weapon", "stabbing", "severe bleeding", "building fire", "house fire")),
-    (0.7, ("fire", "smoke", "overdose", "unconscious", "assault", "crash", "gas leak")),
-    (0.5, ("injury", "pain", "fight", "accident", "distress", "panic")),
+    (0.95, ("active shooter", "mass casualty", "explosion", "hostage", "bomb", "building collapse", "people trapped", "tsunami")),
+    (0.85, ("gun", "weapon", "stabbing", "severe bleeding", "building fire", "house fire", "cyclone", "earthquake", "landslide")),
+    (0.7, ("fire", "smoke", "overdose", "unconscious", "assault", "crash", "gas leak", "flood", "flooding", "drowning", "evacuation", "chemical spill", "stampede")),
+    (0.5, ("injury", "pain", "fight", "accident", "distress", "panic", "damage", "blocked", "stranded", "missing", "gas smell")),
     (0.2, ("noise complaint", "parking", "lost wallet", "information", "follow up")),
 )
 

@@ -1,0 +1,8 @@
+{
+  "name": "Noise complaint - low priority",
+  "transcript": "My neighbor is playing loud music again, it is past midnight and I cannot sleep",
+  "expected_intent": "non_emergency",
+  "expected_severity": ["low"],
+  "expected_responder": "call_center_followup",
+  "expected_logistics_trigger": false
+}

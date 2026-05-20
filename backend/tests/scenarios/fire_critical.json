@@ -1,0 +1,8 @@
+{
+  "name": "Critical warehouse fire in Bhubaneswar",
+  "transcript": "There is a massive fire at the warehouse on 5th street in Bhubaneswar, people are trapped inside, we need help immediately",
+  "expected_intent": "fire",
+  "expected_severity": ["critical", "high"],
+  "expected_responder": "fire_dispatch",
+  "expected_logistics_trigger": true
+}
