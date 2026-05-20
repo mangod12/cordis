@@ -1,0 +1,17 @@
+{
+  "name": "Cyclone Landfall — Chennai",
+  "description": "Severe cyclone making landfall on Tamil Nadu coast. Tests crisis rerouting with airport and port fallbacks.",
+  "request": {
+    "method": "POST",
+    "endpoint": "/api/v1/logistics/execute",
+    "body": {
+      "query": "Cyclone making landfall near Chennai with wind speeds over 150 kmph. Coastal areas flooding, roads blocked. Need evacuation support, medical supplies, and emergency shelters for 100,000 people across Tamil Nadu coast."
+    }
+  },
+  "expected_behavior": {
+    "crisis_type": "Cyclone",
+    "replanning_triggered": true,
+    "airports_used": ["MAA (Chennai)", "BLR (Bangalore)"],
+    "ports_considered": ["Chennai Port", "Ennore Port"]
+  }
+}

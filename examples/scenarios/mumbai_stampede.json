@@ -1,0 +1,17 @@
+{
+  "name": "Stampede — Mumbai Railway Station",
+  "description": "Mass casualty event at crowded railway station. Tests medical emergency triage + dispatch.",
+  "request": {
+    "method": "POST",
+    "endpoint": "/process-emergency",
+    "body": {
+      "transcript": "Stampede at Mumbai Elphinstone Road railway station, dozens of people crushed, many unconscious, we need ambulances and medical teams immediately, this is very serious",
+      "caller_id": "demo-stampede-001"
+    }
+  },
+  "expected_response": {
+    "intent": "medical",
+    "severity": "critical",
+    "responder": "ambulance"
+  }
+}

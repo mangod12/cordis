@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Cordis"
+    VERSION: str = "0.2.0"
     API_V1_STR: str = "/api/v1"
     APP_ENV: str = "development"
 

@@ -1,0 +1,18 @@
+{
+  "name": "Warehouse Fire — Bhubaneswar",
+  "description": "Critical fire emergency with trapped victims. Demonstrates full triage pipeline + logistics trigger.",
+  "request": {
+    "method": "POST",
+    "endpoint": "/process-emergency",
+    "body": {
+      "transcript": "There is a massive fire at the warehouse on 5th street in Bhubaneswar, people are trapped inside, send help immediately",
+      "caller_id": "demo-fire-001"
+    }
+  },
+  "expected_response": {
+    "intent": "fire",
+    "severity": "high",
+    "responder": "fire_dispatch"
+  },
+  "notes": "Logistics pipeline auto-triggers for critical/high fire emergencies."
+}

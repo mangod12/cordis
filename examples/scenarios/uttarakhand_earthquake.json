@@ -1,0 +1,17 @@
+{
+  "name": "Earthquake — Uttarakhand",
+  "description": "Major earthquake causing building collapse and road damage. Tests multi-modal transport fallback.",
+  "request": {
+    "method": "POST",
+    "endpoint": "/api/v1/logistics/execute",
+    "body": {
+      "query": "Earthquake magnitude 6.8 in Uttarakhand near Joshimath. Multiple buildings collapsed, Rishikesh-Badrinath highway blocked by landslides. Need search and rescue teams, medical supplies, emergency shelters, and heavy equipment."
+    }
+  },
+  "expected_behavior": {
+    "crisis_type": "Earthquake",
+    "replanning_triggered": true,
+    "airports_used": ["DED (Dehradun)", "GCR (Gauchar)"],
+    "alternative_routes": true
+  }
+}

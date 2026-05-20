@@ -147,7 +147,7 @@ docs_enabled = settings.ENABLE_DOCS and settings.APP_ENV.lower() != "production"
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Open-source AI crisis coordination — from distress call to resource dispatch.",
-    version="0.1.0",
+    version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json" if docs_enabled else None,
     docs_url="/docs" if docs_enabled else None,
     redoc_url="/redoc" if docs_enabled else None,
@@ -173,8 +173,10 @@ app.add_middleware(
 )
 
 from app.middleware.security_headers import SecurityHeadersMiddleware
+from app.middleware.request_id import RequestIDMiddleware
 
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RequestIDMiddleware)
 
 # ---------------------------------------------------------------------------
 # Routers
@@ -203,9 +205,33 @@ async def protected_metrics(request: Request) -> StarletteResponse:
 @app.get("/health", tags=["health"])
 async def health_check() -> dict:
     from app.core.database import check_db_health
+    from app.core.redis_client import get_redis_client
+
     db_ok = await check_db_health()
+
+    redis_ok = False
+    try:
+        redis = get_redis_client()
+        if redis:
+            await redis.ping()
+            redis_ok = True
+    except Exception:
+        pass
+
+    whisper_ok = getattr(app.state, "whisper_service", None) is not None and app.state.whisper_service.is_ready()
+    intent_ok = getattr(app.state, "intent_loader", None) is not None
+
+    all_ok = db_ok and redis_ok
+
     return {
-        "status": "ok" if db_ok else "degraded",
+        "status": "ok" if all_ok else "degraded",
         "project": "cordis",
+        "version": settings.VERSION,
         "logistics_enabled": settings.LOGISTICS_ENABLED,
+        "dependencies": {
+            "database": "ok" if db_ok else "down",
+            "redis": "ok" if redis_ok else "down",
+            "whisper_stt": "ok" if whisper_ok else "not_loaded",
+            "intent_model": "ok" if intent_ok else "not_loaded",
+        },
     }

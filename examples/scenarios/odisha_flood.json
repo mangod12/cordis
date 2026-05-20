@@ -1,0 +1,17 @@
+{
+  "name": "Monsoon Flood — Odisha",
+  "description": "Severe flooding across 3 districts. Demonstrates logistics coordination pipeline with resource planning and route replanning.",
+  "request": {
+    "method": "POST",
+    "endpoint": "/api/v1/logistics/execute",
+    "body": {
+      "query": "Severe monsoon flooding in Odisha has cut off Puri, Cuttack, and Khordha districts. Over 50,000 people displaced. Urgent need for rice, drinking water, medical supplies, and tarpaulin. NH-16 partially submerged near Bhubaneswar."
+    }
+  },
+  "expected_behavior": {
+    "crisis_type": "Flood",
+    "resources_identified": ["Rice", "Drinking Water", "Medical Supplies", "Tarpaulin"],
+    "replanning_triggered": true,
+    "reason": "NH-16 flood damage triggers alternative route via airport/port"
+  }
+}
