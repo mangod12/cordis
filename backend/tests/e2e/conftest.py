@@ -24,11 +24,16 @@ def jwt_token():
 
 @pytest.fixture
 def authenticated_page(page: Page, jwt_token: str):
-    """Navigate to dashboard with JWT token pre-set in Authorization header."""
-    # Set the Authorization header so the server-side JWT check passes
+    """Navigate to dashboard with JWT token pre-set."""
+    # Set Authorization header for server-side JWT check
     page.set_extra_http_headers({"Authorization": f"Bearer {jwt_token}"})
+
+    # Handle the localStorage prompt dialog by providing the token
+    def handle_dialog(dialog):
+        dialog.accept(jwt_token)
+
+    page.on("dialog", handle_dialog)
+
     page.goto("http://localhost:8000/dashboard")
     page.wait_for_load_state("networkidle")
-    # Also store in localStorage for any client-side JS that reads it
-    page.evaluate(f'localStorage.setItem("cordis_token", "{jwt_token}")')
     return page
