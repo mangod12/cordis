@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { CallRecord } from "@/lib/api";
 import { SEVERITY_COLORS } from "@/lib/constants";
 
@@ -10,7 +11,7 @@ interface CallsTableProps {
 export default function CallsTable({ calls }: CallsTableProps) {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-      <table className="w-full text-sm">
+      <table aria-label="Emergency calls" className="w-full text-sm">
         <thead>
           <tr className="bg-slate-800/70">
             {["Call ID", "Transcript", "Intent", "Emotion", "Severity", "Responder", "Latency"].map((h) => (
@@ -32,7 +33,7 @@ export default function CallsTable({ calls }: CallsTableProps) {
               const sev = SEVERITY_COLORS[c.severity] || SEVERITY_COLORS.low;
               return (
                 <tr key={c.call_id} className="hover:bg-slate-800/30 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-slate-500">{c.call_id}</td>
+                  <td className="px-4 py-3"><Link href={`/calls/${c.call_id}`} className="font-mono text-xs text-cyan-400 hover:underline">{c.call_id}</Link></td>
                   <td className="px-4 py-3 text-slate-300 max-w-xs truncate">{c.transcript?.slice(0, 80)}</td>
                   <td className="px-4 py-3 text-slate-300">
                     {c.intent} <span className="text-slate-600">({(c.intent_confidence * 100).toFixed(0)}%)</span>

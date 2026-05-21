@@ -24,7 +24,7 @@ const valueStyles: Record<string, string> = {
 
 export default function PipelineViz({ steps, values }: PipelineVizProps) {
   return (
-    <div className="mt-4">
+    <div role="status" aria-label="Agent pipeline status" className="mt-4">
       <p className="text-[10px] text-slate-600 uppercase tracking-widest font-semibold mb-2">Agent Pipeline</p>
       <div className="flex items-center gap-1">
         {PIPELINE_STEPS.map((step, i) => (

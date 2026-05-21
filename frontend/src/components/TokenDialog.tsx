@@ -20,7 +20,7 @@ export default function TokenDialog({ onSet }: TokenDialogProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div role="dialog" aria-modal="true" aria-label="Authentication dialog" className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 bg-cyan-500/10 rounded-lg">
@@ -33,6 +33,7 @@ export default function TokenDialog({ onSet }: TokenDialogProps) {
         </div>
         <form onSubmit={handleSubmit}>
           <input
+            autoFocus
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="eyJhbGciOiJIUzI1NiIs..."

@@ -11,7 +11,7 @@ interface CrisisMapProps {
 export default function CrisisMap({ calls }: CrisisMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<L.CircleMarker[]>([]);
+  const markersRef = useRef<Map<string, L.CircleMarker>>(new Map());
 
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
@@ -27,6 +27,8 @@ export default function CrisisMap({ calls }: CrisisMapProps) {
     });
 
     return () => {
+      markersRef.current.forEach((m) => m.remove());
+      markersRef.current.clear();
       mapInstanceRef.current?.remove();
       mapInstanceRef.current = null;
     };
@@ -36,23 +38,27 @@ export default function CrisisMap({ calls }: CrisisMapProps) {
     if (!mapInstanceRef.current) return;
 
     import("leaflet").then((L) => {
-      // Clear old markers
-      markersRef.current.forEach((m) => m.remove());
-      markersRef.current = [];
+      const currentIds = new Set(calls.map((c) => c.call_id));
 
+      // Remove markers for calls no longer present
+      for (const [id, marker] of markersRef.current) {
+        if (!currentIds.has(id)) {
+          marker.remove();
+          markersRef.current.delete(id);
+        }
+      }
+
+      // Add markers for new calls only
       calls.forEach((c) => {
+        if (markersRef.current.has(c.call_id)) return;
+
         const text = (c.transcript || "").toLowerCase();
         for (const [city, coords] of Object.entries(CITIES)) {
           if (text.includes(city)) {
             const color = SEVERITY_HEX[c.severity] || "#94a3b8";
             const radius = c.severity === "critical" ? 12 : c.severity === "high" ? 9 : 6;
             const marker = L.circleMarker(coords, {
-              radius,
-              fillColor: color,
-              color,
-              weight: 2,
-              opacity: 0.9,
-              fillOpacity: 0.4,
+              radius, fillColor: color, color, weight: 2, opacity: 0.9, fillOpacity: 0.4,
             }).addTo(mapInstanceRef.current!);
             marker.bindPopup(
               `<div style="font-family:system-ui;font-size:13px;">
@@ -61,7 +67,7 @@ export default function CrisisMap({ calls }: CrisisMapProps) {
                 <span style="color:#64748b;font-size:11px">${(c.transcript || "").slice(0, 100)}</span>
               </div>`
             );
-            markersRef.current.push(marker);
+            markersRef.current.set(c.call_id, marker);
             break;
           }
         }

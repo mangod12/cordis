@@ -25,7 +25,7 @@ export default function StatsBar({ calls }: StatsBarProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+    <div role="region" aria-label="Emergency statistics" className="grid grid-cols-2 md:grid-cols-5 gap-3">
       {stats.map((s) => (
         <div key={s.label} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
           <p className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{s.label}</p>

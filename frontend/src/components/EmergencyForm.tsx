@@ -7,11 +7,12 @@ import PipelineViz from "./PipelineViz";
 
 interface EmergencyFormProps {
   onResult: (result: EmergencyResponse) => void;
+  backendOnline?: boolean;
 }
 
 type StepState = "idle" | "active" | "done" | "error";
 
-export default function EmergencyForm({ onResult }: EmergencyFormProps) {
+export default function EmergencyForm({ onResult, backendOnline }: EmergencyFormProps) {
   const [transcript, setTranscript] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,6 +23,7 @@ export default function EmergencyForm({ onResult }: EmergencyFormProps) {
   const [stepValues, setStepValues] = useState<Record<string, string>>({});
   const [showPipeline, setShowPipeline] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState("");
 
   async function handleSubmit() {
     const file = fileRef.current?.files?.[0];
@@ -95,9 +97,9 @@ export default function EmergencyForm({ onResult }: EmergencyFormProps) {
           >
             <Upload size={14} /> Choose File
           </button>
-          <input ref={fileRef} type="file" accept="audio/*" className="hidden" />
+          <input ref={fileRef} type="file" accept="audio/*" className="hidden" onChange={(e) => setFileName(e.target.files?.[0]?.name || "")} />
           <span className="text-xs text-slate-600">
-            {fileRef.current?.files?.[0]?.name || "No file chosen"}
+            {fileName || "No file chosen"}
           </span>
         </div>
       </div>
@@ -106,6 +108,9 @@ export default function EmergencyForm({ onResult }: EmergencyFormProps) {
       <div className="mb-4">
         <label className="text-xs text-slate-500 mb-1 block">Or type transcript</label>
         <textarea
+          id="transcript-input"
+          aria-label="Emergency transcript"
+          autoFocus
           value={transcript}
           onChange={(e) => setTranscript(e.target.value)}
           rows={3}
@@ -114,10 +119,19 @@ export default function EmergencyForm({ onResult }: EmergencyFormProps) {
         />
       </div>
 
+      {/* Offline Warning */}
+      {backendOnline === false && (
+        <div className="mb-3 p-2 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-2 text-red-400 text-xs">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          Backend offline — cannot process emergencies
+        </div>
+      )}
+
       {/* Submit */}
       <button
         onClick={handleSubmit}
-        disabled={loading}
+        disabled={loading || backendOnline === false}
+        aria-label="Process emergency"
         className="w-full flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-semibold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
