@@ -114,7 +114,7 @@ class Settings(BaseSettings):
     # Comma-separated list of allowed origins, e.g.:
     #   ALLOWED_ORIGINS=https://app.cordis.dev,https://admin.cordis.dev
     # Set to "*" only in local development (handled by the lifespan check).
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173"]
 
     # ---- Docs -----------------------------------------------------------
     # Disable Swagger / ReDoc in production

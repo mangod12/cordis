@@ -43,3 +43,6 @@ htmlcov/
 backend/ml/*.onnx.data
 backend/ml/*.onnx
 backend/ml/*.pt
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
