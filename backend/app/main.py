@@ -189,7 +189,7 @@ from app.api.v1.endpoints.emergency import router as emergency_router  # noqa: E
 app.include_router(api_router, prefix=settings.API_V1_STR, dependencies=[Depends(require_jwt_token)])
 app.include_router(emergency_router, dependencies=[Depends(require_jwt_token)])
 app.include_router(websocket_router, prefix="/ws", tags=["websockets"])
-app.include_router(dashboard_router, tags=["dashboard"], dependencies=[Depends(require_jwt_token)])
+app.include_router(dashboard_router, tags=["dashboard"])  # Dashboard HTML is public; JS calls use JWT
 
 
 @app.get("/metrics", include_in_schema=False, dependencies=[Depends(require_jwt_token)])
