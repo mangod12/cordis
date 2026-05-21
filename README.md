@@ -4,8 +4,8 @@
 
 **Open-source AI crisis coordination — from distress call to resource dispatch in under 60ms.**
 
-[![CI](https://github.com/Cordis-AI/Cordis/actions/workflows/ci.yml/badge.svg)](https://github.com/Cordis-AI/Cordis/actions)
-[![Tests](https://img.shields.io/badge/tests-202%20passing-brightgreen)](backend/tests/)
+[![CI](https://github.com/mangod12/cordis/actions/workflows/ci.yml/badge.svg)](https://github.com/mangod12/cordis/actions)
+[![Tests](https://img.shields.io/badge/tests-242%20passing-brightgreen)](backend/tests/)
 [![Coverage](https://img.shields.io/badge/coverage-32%25-yellow)](backend/tests/)
 [![Python](https://img.shields.io/badge/python-3.11+-blue)](https://python.org)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
@@ -35,7 +35,7 @@
 
 ```bash
 # Clone and start
-git clone https://github.com/YOUR_USER/Cordis.git && cd Cordis
+git clone https://github.com/mangod12/cordis.git && cd cordis
 docker compose up
 
 # In another terminal — simulate a fire emergency
@@ -161,7 +161,7 @@ backend/
 ├── tests/
 │   ├── scenarios/                 # 16 golden test scenarios
 │   ├── e2e/                       # Playwright browser tests
-│   └── test_*.py                  # 202 tests total
+│   └── test_*.py                  # 242 tests total
 └── requirements.txt
 ```
 
@@ -179,7 +179,7 @@ backend/
 | **Auth** | JWT (HS256) + rate limiting + tenant isolation |
 | **Observability** | structlog (JSON), Prometheus metrics |
 | **Protocol** | MCP (Model Context Protocol) |
-| **Testing** | pytest + Playwright (202 tests) |
+| **Testing** | pytest + Playwright (242 tests) |
 | **CI/CD** | GitHub Actions (lint, test, coverage, Docker) |
 
 ## Configuration
