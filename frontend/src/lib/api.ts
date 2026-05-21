@@ -83,12 +83,18 @@ export async function submitAudio(file: File): Promise<EmergencyResponse> {
 }
 
 export async function fetchCalls(limit = 50): Promise<CallRecord[]> {
-  const resp = await fetch(`${API_BASE}/api/v1/calls/live?limit=${limit}`, {
-    headers: headers(),
-  });
-  if (!resp.ok) return [];
-  const data = await resp.json();
-  return data.calls || [];
+  const token = getToken();
+  if (!token) return []; // Don't attempt API call without token
+  try {
+    const resp = await fetch(`${API_BASE}/api/v1/calls/live?limit=${limit}`, {
+      headers: headers(),
+    });
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return data.calls || [];
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchHealth(): Promise<HealthResponse | null> {

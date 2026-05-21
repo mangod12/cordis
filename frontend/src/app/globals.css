@@ -20,6 +20,23 @@ body {
 /* Leaflet overrides for dark theme */
 .leaflet-container {
   background: #0f172a !important;
+  z-index: 1 !important;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid #334155 !important;
+}
+
+.leaflet-control-zoom a {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(15,23,42,0.8) !important;
+  color: #64748b !important;
+  font-size: 10px !important;
 }
 
 .leaflet-popup-content-wrapper {
