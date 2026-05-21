@@ -40,3 +40,6 @@ htmlcov/
 
 # Logs
 *.log
+backend/ml/*.onnx.data
+backend/ml/*.onnx
+backend/ml/*.pt
